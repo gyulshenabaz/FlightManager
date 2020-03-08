@@ -1,0 +1,20 @@
+@model IEnumerable<FlightListingViewModel>
+
+@{
+    ViewBag.Title = "Всички полети";
+}
+
+<section class="py-5">
+     <div class="container">
+         <h3 class="subtitle text-primary mb-4 text-center">Полети</h3>
+         @if (!Model.Any())
+         {
+             <p class="h5 text-center p-3">Няма добавени полети в системата</p>
+         }
+         else
+         {
+             <partial name="Flights/_FlightListingPartial" model="@Model"/>
+         }
+     </div>
+    </section>
+

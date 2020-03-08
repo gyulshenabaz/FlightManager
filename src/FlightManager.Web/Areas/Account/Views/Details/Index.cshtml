@@ -1,0 +1,58 @@
+@model UserEditBindingModel
+
+@{
+    Layout = "_Layout";
+    ViewData["ActiveView"] = ManageNavViews.Index;
+
+    ViewData["Title"] = "Профил";
+    
+    var isUserAdmin = User.IsInRole(GlobalConstants.AdministratorRoleName);
+}
+
+<div class="card">
+    <div class="card-body">
+        <h6 class="text-uppercase mb-4">Вашият профил</h6>
+        <form method="post">
+            <div class="form-row">
+                <div class="col-md-4 mb-4">
+                    <label class="form-label">Име</label>
+                     <input value="@Model.FirstName" class="form-control" disabled>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <label class="form-label">Фамилия</label>
+                    <input value="@Model.LastName" class="form-control" disabled>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <label class="form-label"><i class="fas fa-user-friends fa-fw text-muted mr-2"></i>Потребителско име</label>
+                    <input asp-for="Username" type="text" class="form-control" placeholder="Потребителско име">
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-3 mb-3">
+                    <label class="form-label"><i class="far fa-envelope fa-fw text-muted mr-2"></i>Имейл</label>
+                    <input asp-for="Email" class="form-control" placeholder="Имейл">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label"><i class="fas fa-fingerprint fa-fw text-muted mr-2"></i>ЕГН</label>
+                    <input value="@Model.UniqueCitizenshipNumber" class="form-control" disabled>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label"><i class="fas fa-phone fa-fw text-muted mr-2"></i>Телефонен номер</label>
+                    <input asp-for="PhoneNumber" class="form-control" placeholder="Телефонен номер">
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label"><i class="far fa-address-book fa-fw text-muted mr-2"></i>Адрес</label>
+                    <input asp-for="Address" class="form-control" placeholder="Адрес">
+                </div>
+            </div>
+            <div class="row justify-content-center py-5">
+                <div class="col-md-2">
+                    <button class="btn btn-primary btn-block" type="submit">Редактирай</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

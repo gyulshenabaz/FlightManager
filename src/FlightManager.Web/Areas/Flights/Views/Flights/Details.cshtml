@@ -1,0 +1,134 @@
+@model FlightDetailsViewModel 
+
+@{
+    ViewBag.Title = $"{Model.From} - {@Model.To}";
+  
+    var flightDuration = Model.ArrivalDate.Subtract(Model.DepartureDate); 
+    
+    var flightDurationDays = $"{(flightDuration.Days == 0 ? null : flightDuration.Days + (flightDuration.Days == 1 ? " ден" : " дни"))}";
+    var flightDurationHours = $"{(flightDuration.Hours == 0 ? null : flightDuration.Hours + (flightDuration.Hours == 1 ? " час" : " часа"))}";
+    var flightDurationMinutes = $"{(flightDuration.Minutes == 0 ? null : flightDuration.Minutes + (flightDuration.Minutes == 1 ? " минута" : " минути"))}";
+    
+}
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="text-block">
+                <div class="py-10 text-block">
+                    <div class="row mb-2">
+                        <div class="col-md-3 d-flex align-items-center mb-3 mb-md-0">
+                            <div class="date-tile mr-3">
+                                <div class="text-uppercase"> <span class="text-sm">@Model.DepartureDate.ToString("MMM")</span>
+                                    <br><strong class="text-lg">@Model.DepartureDate.Day</strong></div>
+                            </div>
+                            <p class="text-sm mb-0">
+                                @Model.DepartureDate.ToString("dddd")
+                                <br>@Model.DepartureDate.ToString("HH:mm")
+                                <br>@Model.DepartureDate.Year
+                            </p>
+                        </div>
+                        <div class="col-md-6 align-items-center">
+                            <h4 class="text-center">@Model.From<i class="fas fa-plane fa-fw text-muted mr-3 ml-3"></i>@Model.To</h4>
+                            <h6 class="text-center"><i class="far fa-clock fa-fw text-muted mr-1 ml-1"></i>
+                                @flightDurationDays @flightDurationHours @flightDurationMinutes
+                            </h6>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-center">
+                            <div class="date-tile mr-3">
+                                <div class="text-uppercase"> <span class="text-sm">@Model.ArrivalDate.ToString("MMM")</span>
+                                    <br><strong class="text-lg">@Model.ArrivalDate.Day</strong></div>
+                            </div>
+                            <p class="text-sm mb-0">
+                                @Model.ArrivalDate.ToString("dddd")
+                                <br>@Model.ArrivalDate.ToString("HH:mm")
+                                <br>@Model.ArrivalDate.Year
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row py-4 text-center">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <p class="h6 text-muted"><i class="fas fa-plane fa-fw text-muted mr-2"></i>Вид на самолета</p>
+                            <p class="h5">@Model.AircraftType</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <p class="h6 text-muted"><i class="fas fa-user-tie fa-fw text-muted mr-2"></i>Име на пилот</p>
+                            <p class="h5">@Model.PilotName</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <p class="h6 text-muted"><i class="fas fa-plane fa-fw text-muted mr-2"></i>Уникален номер</p>
+                            <p class="h5">@Model.AircraftRegistration</p>
+                        </div>
+                    </div>
+                </div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <p class="h6 text-muted">Всички места</p>
+                                <p class="h5">@Model.AvailableSeats</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <p class="h6 text-muted">Бизнес класа</p>
+                                <p class="h5">@Model.BusinessClassSeats</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <p class="h6 text-muted">Икономична класа</p>
+                                <p class="h5">@Model.EconomyClassSeats</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <partial name="_ReservationButtonPartial" model="@Model"/>
+    </div>
+    <partial name="_ReservationsListPartial" model="@Model.Reservations"/>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title text-center"></h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary mr-auto" data-dismiss="modal">Затвори</button>
+                <form method="post" asp-action="Delete" asp-controller="Reservations" asp-area="Administration">
+                    <input type="hidden" name="id">
+                    <button type="submit" class="btn btn-danger">Изтрий</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#deleteModal').on('show.bs.modal',
+            function(event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var email = button.data('email');
+                var modal = $(this);
+                modal.find('.modal-title').text('Изтрий резервацията на ' + email);
+                modal.find('.modal-body').text('Сигурни ли сте, че искате да изтриете резервацията на ' + email + '?');
+                modal.find('.modal-footer input[name=id]').val(id);
+            })
+    </script>
+}

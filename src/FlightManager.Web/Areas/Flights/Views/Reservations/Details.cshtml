@@ -1,0 +1,54 @@
+@model ReservationDetailsViewModel
+
+@{
+    ViewBag.Title = $"{Model.From} {Model.To}";
+    Layout = "_Layout";
+}
+
+<div class="container">
+<div class="row justify-content-center">
+    <div class="col-lg-12 py-5 text-center">
+        <a asp-action="Details" asp-controller="Flights" asp-route-id="@Model.FlightId" class="h4 text-primary mb-4">
+            @Model.From<i class="fas fa-plane fa-fw text-muted mr-3 ml-3"></i>@Model.To
+        </a>
+        <h5 class="text-muted py-3">Резервация на @Model.Email</h5>
+        <h5 class="text-primary">Пътници</h5>
+        <table class="table table-hover dt-responsive dataTable nowrap" id="dataTable">
+            <thead>
+            <tr>
+                <th scope="col">Име</th>
+                <th scope="col">Презиме</th>
+                <th scope="col">Фамилия</th>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <th scope="col">ЕГН</th>
+                    <th scope="col"><i class="fas fa-phone fa-fw"></i></th>
+                    <th scope="col">Билет</th>
+                    <th scope="col"><i class="fas fa-globe-europe"></i></th>
+                }
+            </tr>
+            </thead>
+            <tbody>
+                @foreach (var passenger in Model.Passengers)
+                {
+                    <tr>
+                        <td>@passenger.FirstName</td>
+                        <td>@passenger.MiddleName</td>
+                        <td>@passenger.LastName</td>
+                        
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <td>@passenger.UniqueCitizenshipNumber</td>
+                            <td>@passenger.PhoneNumber</td>
+                            <td>@passenger.TicketType</td>
+                            <td>@passenger.Nationality</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+

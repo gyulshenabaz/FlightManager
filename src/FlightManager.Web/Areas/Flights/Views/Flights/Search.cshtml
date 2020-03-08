@@ -1,0 +1,51 @@
+@model SearchBindingModel
+
+@{ 
+    ViewData["Title"] = Model?.From != null ? $"Полети от {Model.From}" : "Търси полети";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <partial name="Flights/_SearchPartial" model="@Model"/>
+        </div>
+    </div>
+</div>
+@if (Model?.FoundFlights != null)
+{
+    <section class="py-4">
+        <div class="container">
+             <hr class="my-4">
+            @if (!Model.FoundFlights.Any())
+            {
+                <p class="h5 text-center p-3">Не бяха открити полети от @Model.From за @Model.To</p>
+            }
+            else
+            {
+                <partial name="Flights/_FlightListingPartial" model="@Model.FoundFlights"/>
+            }
+        </div>
+    </section>
+}
+
+@section CustomCss {
+    <link href="~/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+}
+
+@section Scripts {
+    
+    <script src="~/js/bootstrap-datetimepicker.js"></script>
+    <script src="~/js/location.js"></script>
+
+    <script>
+     $('#date').datetimepicker({
+            format: 'MM-DD-YYYY',
+            locale: 'bg',
+            minDate: moment(),
+            icons: {
+                time: 'far fa-clock',
+                date: 'far fa-calendar'
+            }
+        });
+          
+    </script>
+}

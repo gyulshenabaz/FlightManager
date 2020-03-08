@@ -1,0 +1,148 @@
+@model FlightCreateBindingModel
+
+<section class="py-5">
+    <div class="container">
+        <form method="post" id="createForm">
+            <div class="row">
+                <div class="col-lg-7">
+                    <h1 class="h4 mb-4 text-primary text-center">Добави нов полет</h1>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-plane-departure fa-fw text-muted mr-2"></i>От</label>
+                                <div class="input-group">
+                                    <input id="fromInput" class="form-control" asp-for="From" />
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="getNearestAirportCity('#fromIcon', '#fromInput')">
+                                            <i id="fromIcon" class="fas fa-crosshairs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <span asp-validation-for="From" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-plane-arrival fa-fw text-muted mr-2"></i>До</label>
+                                <div class="input-group">
+                                    <input id="toInput" class="form-control" asp-for="To" />
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="getNearestAirportCity('#toIcon', '#toInput')">
+                                            <i id="toIcon" class="fas fa-crosshairs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <span asp-validation-for="To" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label"><i class="far fa-calendar fa-fw text-muted mr-2"></i>Заминаване</label>
+                                <input asp-for="DepartureDate" asp-format="{0:MM-dd-yyyy HH:mm}" id="departureDate" class="form-control">
+                                <span asp-validation-for="DepartureDate" class="text-danger"></span>
+                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label"><i class="far fa-calendar fa-fw text-muted mr-2"></i>Пристигане</label>
+                                <input asp-for="ArrivalDate" asp-format="{0:MM-dd-yyyy HH:mm}" id="arrivalDate" class="form-control">
+                                <span asp-validation-for="ArrivalDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-plane fa-fw text-muted mr-2"></i>Вид на самолета</label>
+                                <input asp-for="AircraftType" class="form-control">
+                                <span asp-validation-for="AircraftType" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-plane fa-fw text-muted mr-2"></i>Уникален номер</label>
+                                <input asp-for="AircraftRegistration" class="form-control">
+                                <span asp-validation-for="AircraftRegistration" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-user-tie fa-fw text-muted mr-2"></i>Име на пилот</label>
+                                <input asp-for="PilotName" class="form-control">
+                                <span asp-validation-for="PilotName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-user-friends fa-fw text-muted mr-2"></i>Свободни места</label>
+                                <input asp-for="AvailableSeats" type="number" min="10" max="400" class="form-control">
+                                <span asp-validation-for="AvailableSeats" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-users fa-fw text-muted mr-2"></i>Свободни места - бизнес класа</label>
+                                <input asp-for="BusinessClassSeats" type="number" min="10" max="400" class="form-control">
+                                <span asp-validation-for="BusinessClassSeats" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 pl-xl-5">
+                    <img src="~/img/flightAnimated.gif" class="img-fluid">
+                </div>
+            </div>
+            <div class="row justify-content-center py-4">
+                <div class="col-md-2">
+                    <button class="btn btn-primary btn-block" type="submit">Добави</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section CustomCss {
+    <link href="~/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+} 
+
+@section Scripts {
+    
+    <script src="~/js/bootstrap-datetimepicker.js"></script>
+    
+    <script src="~/js/location.js"></script>
+    
+    <script>
+        $('#departureDate').datetimepicker({
+            format: 'DD-MM-YYYY HH:mm',
+            locale: 'bg',
+            minDate: moment(),
+            icons: {
+                time: 'far fa-clock',
+                date: 'far fa-calendar'
+            }
+        });
+    
+        $('#arrivalDate').datetimepicker({
+            useCurrent: false,
+            format: 'DD-MM-YYYY HH:mm',
+            locale: 'bg',
+            minDate: moment(),
+            icons: {
+                time: 'far fa-clock',
+                date: 'far fa-calendar'
+            }
+        });
+    
+        $("#departureDate").on("dp.change", function(e) {
+            $('#arrivalDate').data("DateTimePicker").minDate(e.date);
+        });
+        $("#arrivalDate").on("dp.change", function(e) {
+            $('#departureDate').data("DateTimePicker").maxDate(e.date);
+        });
+    
+    </script>
+}

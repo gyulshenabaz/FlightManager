@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\FlightManager.Common\FlightManager.Common.csproj" />
+      <ProjectReference Include="..\FlightManager.Data\FlightManager.Data.csproj" />
+      <ProjectReference Include="..\FlightManager.Models\FlightManager.Models.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.IO.Abstractions" Version="9.0.4" />
+    </ItemGroup>
+
+</Project>

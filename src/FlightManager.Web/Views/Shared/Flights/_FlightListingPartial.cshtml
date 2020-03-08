@@ -1,0 +1,36 @@
+@model IEnumerable<FlightManager.Web.Areas.Flights.Models.Flights.FlightListingViewModel>
+
+<div class="table-responsive">
+    <table class="table table-hover dt-responsive dataTable nowrap text-center" data-searching="false" id="dataTable">
+        <thead>
+        <tr>
+            <th scope="col"><i class="fas fa-plane-departure fa-fw text-muted mr-2"></i>Полет</th>
+            <th scope="col"><i class="far fa-calendar-alt fa-fw text-muted mr-2"></i>Заминаване</th>
+            <th scope="col"><i class="far fa-calendar-alt fa-fw text-muted mr-2"></i>Пристигане</th>
+            <th scope="col" class="no-sort">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var flight in Model)
+        {
+            <tr>
+                <td>@flight.From<i class="fas fa-plane fa-fw text-muted mr-2 ml-2"></i>@flight.To</td>
+                <td>@flight.DepartureDate.ToString("dd-MM-yyyy HH:mm")</td>
+                <td>@flight.ArrivalDate.ToString("dd-MM-yyyy HH:mm")</td>
+                <td>
+                    @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+                    {
+                        <a class="btn btn-outline-secondary"  asp-action="Edit" asp-controller="Flights" asp-area="Administration" asp-route-id="@flight.Id">
+                            <i class="fas fa-pen"></i>
+                            Редактирай
+                        </a>
+                    }
+                    <a asp-action="Details" asp-controller="Flights" asp-route-id="@flight.Id" class="btn btn-primary text-white">
+                        <i class="fa fa-plane mr-2"></i>Детайли
+                    </a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

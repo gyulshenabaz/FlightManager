@@ -1,0 +1,318 @@
+@model ReservationCreateBindingModel
+
+@{
+    ViewData["Title"] = $"Нова резервация {Model.Flight.From} - {Model.Flight.To}";
+}
+
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7">
+                <p class="subtitle text-primary">Резервирайте своя билет</p>
+                <h1 class="h4 mb-5">Попълнете посочената информация</h1>
+                <div class="text-block">
+                    <div class="row mb-3">
+                        <div class="col-md-6 d-flex align-items-center mb-3 mb-md-0">
+                            <div class="date-tile mr-3">
+                                <div class="text-uppercase"> <span class="text-sm">@Model.Flight.DepartureDate.ToString("MMM")</span>
+                                    <br><strong class="text-lg">@Model.Flight.DepartureDate.Day</strong></div>
+                            </div>
+                            <p class="text-sm mb-0">
+                                @Model.Flight.DepartureDate.ToString("dddd")
+                                <br>@Model.Flight.DepartureDate.ToString("HH:mm")
+                                <br>@Model.Flight.DepartureDate.Year
+                            </p>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-center">
+                            <div class="date-tile mr-3">
+                                <div class="text-uppercase"> <span class="text-sm">@Model.Flight.ArrivalDate.ToString("MMM")</span>
+                                    <br><strong class="text-lg">@Model.Flight.ArrivalDate.Day</strong></div>
+                            </div>
+                            <p class="text-sm mb-0">
+                                @Model.Flight.ArrivalDate.ToString("dddd")
+                                <br>@Model.Flight.ArrivalDate.ToString("HH:mm")
+                                <br>@Model.Flight.ArrivalDate.Year
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-block">
+                    <div class="form-group">
+                        <label class="form-label">Имейл адрес</label>
+                        <input asp-for="Email" id="emailField" name="name" class="form-control">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 pl-xl-5">
+                <div class="card border-0 shadow">
+                    <div class="card-body p-4">
+                        <div class="text-block pb-3">
+                            <div class="media align-items-center">
+                                <div class="media-body mt-n1">
+                                    <h6>
+                                        <a asp-action="Details" asp-controller="Flights" asp-route-id="@Model.Flight.Id" class="text-reset">
+                                            <i class="fas fa-plane-departure fa-fw text-muted mr-2"></i>
+                                            @Model.Flight.From - @Model.Flight.To
+                                            <i class="fas fa-plane-arrival fa-fw text-muted ml-2"></i>
+                                        </a>
+                                    </h6>
+                                </div>
+                                <a><img src="https://cdn.dribbble.com/users/1008875/screenshots/3749109/airplane.png" alt="" width="100" class="ml-3 rounded"></a>
+                            </div>
+                        </div>
+                        <div class="text-block py-3">
+                            <ul class="list-unstyled mb-0 text-center">
+                                <li class="mb-2">
+                                    <i class="far fa-calendar fa-fw text-muted mr-2"></i> @Model.Flight.DepartureDate.ToString("dd-MM-yyyy HH:mm")
+                                </li>
+                                <li class="mb-0">
+                                    <i class="far fa-calendar fa-fw text-muted mr-2"></i> @Model.Flight.ArrivalDate.ToString("dd-MM-yyyy HH:mm")
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-primary-light py-4 border-0">
+                        <div class="media align-items-center">
+                            <div class="media-body">
+                                <h6 class="text-primary">Допълнителна информация</h6>
+                                <p class="text-sm text-primary opacity-8 mb-0">Пилот: @Model.Flight.PilotName</p>
+                                <p class="text-sm text-primary opacity-8 mb-0">Вид на самолета: @Model.Flight.AircraftType</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4 justify-content-center">
+                    <button type="button" class="btn btn-primary btn" data-toggle="modal" data-target="#passengerModal"><i class="fas fa-plus mr-2"></i>Нов пасажер</button>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive-sm py-3">
+            <table class="table table-hover dt-responsive dataTable nowrap text-sm text-center" id="passengersTable">
+                <thead>
+                <tr>
+                    <th scope="col">Име</th>
+                    <th scope="col">Презиме</th>
+                    <th scope="col">Фамилия</th>
+                    <th scope="col">ЕГН</th>
+                    <th scope="col"><i class="fas fa-phone fa-fw"></i></th>
+                    <th scope="col">Билет</th>
+                    <th scope="col"><i class="fas fa-globe-europe"></i></th>
+                    <th class="no-sort"></th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="row justify-content-center">
+            <button id="form-button" onclick="book()" class="btn btn-primary px-3">Потвърди</button>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="passengerModal" tabindex="-1" role="dialog" aria-labelledby="passengerModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="passengerModalLabel">Добави нов билет</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="passengerForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Име *</label>
+                                <input id="firstNameField" name="firstName" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Презиме *</label>
+                                <input id="middleNameField" name="middleName" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Фамилия *</label>
+                                <input id="lastNameField" name="lastName" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">ЕГН *</label>
+                                <input id="uniqueIdentifierField" name="uniqueIdentifier" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Телефонен номер *</label>
+                        <input id="phoneNumberField" name="phoneNumber" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Тип на билета *</label>
+                        <select asp-items="Html.GetEnumSelectList<TicketType>()" id="ticketTypeField" name="ticketType" data-style="btn-selectpicker" title="Изберете билет" class="selectpicker form-control">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Националност</label>
+                        <select id="nationalityField" name="nationality" data-style="btn-selectpicker" data-live-search="true" title="Националност" class="selectpicker form-control">
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Затвори</button>
+                        <button type="submit" class="btn btn-primary">Добави</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content text-center">
+            <div class="modal-body">
+                Моля проверете попълнените от Вас данни!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary ml-auto" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="loadingModal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center">
+                    <h4>Проверява се дали има свободни места</h4>
+                    <div class="spinner-grow text-secondary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    
+    <script src="~/js/jquery-validate-init.js"></script>
+    
+    <script>
+    
+        let passengersTable = $('#passengersTable').DataTable({
+            "columnDefs": [{
+                "targets": 7,
+                "data": null,
+                "defaultContent": "<button class='btn btn-outline-danger' id='deletePassengerButton'> <i class='fas fa-trash'></i></button>"
+            }, {
+                targets: 'no-sort',
+                orderable: false
+            }],
+            "columns": [{
+                "data": "FirstName"
+            }, {
+                "data": "MiddleName"
+            }, {
+                "data": "LastName"
+            }, {
+                "data": "UniqueCitizenshipNumber"
+            }, {
+                "data": "PhoneNumber"
+            }, {
+                "data": "TicketType"
+            }, {
+                "data": "Nationality"
+            }],
+            "language": {
+                "lengthMenu": "Покажи _MENU_ записа на страница",
+                "zeroRecords": "Няма записи",
+                "info": "Страница _PAGE_ от _PAGES_",
+                "search": "Търси",
+                "paginate": {
+                    "first": "Първа",
+                    "last": "Последна",
+                    "next": "Следваща",
+                    "previous": "Предишна"
+                },
+                "info": "_START_ - _END_ от _TOTAL_ записа",
+                "infoEmpty": "0 записа",
+                "infoFiltered": "(Филтриран от общо _MAX_ записа)",
+            }
+        });
+        
+        $('#passengersTable tbody').on('click', '#deletePassengerButton', function() {
+            passengersTable
+                .row($(this).parents('tr'))
+                .remove()
+                .draw();
+        });
+        
+        $('#passengerModal').on('show.bs.modal', function(event) {
+            var modal = $(this);
+            passengerFormValidator.resetForm();
+            modal.find('.modal-body .form-control').val('').trigger('change');
+        });
+        
+        function book() {
+            var reservation = {};
+            reservation.email = $('#emailField').val();
+            reservation.passengers = passengersTable.rows().data().toArray();
+        
+            var errorModal = $('#errorModal');
+            var loaderModal = $('#loadingModal');
+        
+            $.ajax({
+                url: '@Url.Action("Create", "Reservations",  new {id = Model.FlightId})',
+                data: JSON.stringify(reservation),
+                type: 'POST',
+                traditional: true,
+                contentType: 'application/json',
+        
+                beforeSend: function() {
+                    loaderModal.modal('show');
+                },
+                complete: function() {
+                    setTimeout(function() {
+                        loaderModal.modal('hide')
+                    }, 2500);
+                },
+                success: function(data) {
+                    window.location.href = data;
+                },
+                error: function() {
+                    setTimeout(function() {
+                        errorModal.modal('show')
+                    }, 2500);
+                }
+            });
+        }
+        
+        $.ajax({
+            url: '@Url.Action("GetAll", "Countries", new {Area = "Api"})',
+            type: "GET",
+            success: function(result) {
+                var countries = $('#nationalityField');
+                $.each(result,
+                    function() {
+                        countries.append(
+                            $('<option/>', {
+                                value: this.ioc,
+                                text: this.name
+                            })
+                        );
+                    });
+                countries.selectpicker('refresh');
+            }
+        });
+        
+    </script>
+}

@@ -1,0 +1,92 @@
+@model UserCreateBindingModel
+
+<section class="py-5">
+    <div class="container">
+        <form method="post">
+            <div class="row">
+                <div class="col-lg-7">
+                    <h1 class="h4 mb-4">Добави нов служител</h1>
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Име</label>
+                                <input asp-for="FirstName" class="form-control">
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Фамилия</label>
+                                <input asp-for="LastName" class="form-control">
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-user-friends fa-fw text-muted mr-2"></i>Потребителско име</label>
+                                <input asp-for="Username" class="form-control">
+                                <span asp-validation-for="Username" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label"><i class="far fa-envelope fa-fw text-muted mr-2"></i>Имейл</label>
+                                <input asp-for="Email" class="form-control">
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fa fa-lock fa-fw text-muted mr-2"></i>Парола</label>
+                                <input asp-for="Password" type="password" class="form-control">
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fa fa-lock fa-fw text-muted mr-2"></i>Потвърдете паролата</label>
+                                <input asp-for="ConfirmNewPassword" type="password" class="form-control">
+                                <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-fingerprint fa-fw text-muted mr-2"></i>ЕГН</label>
+                                <input asp-for="UniqueCitizenshipNumber" class="form-control">
+                                <span asp-validation-for="UniqueCitizenshipNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-phone fa-fw text-muted mr-2"></i>Телефонен номер</label>
+                                <input asp-for="PhoneNumber" class="form-control">
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label"><i class="far fa-address-book fa-fw text-muted mr-2"></i>Адрес</label>
+                                <input asp-for="Address" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 pl-xl-5">
+                    <img src="~/img/pilot.png" class="img-fluid">
+                </div>
+            </div>
+            <div class="row justify-content-center py-4">
+                <div class="col-md-2">
+                    <button class="btn btn-primary btn-block" type="submit">Добави</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

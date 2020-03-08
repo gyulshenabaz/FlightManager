@@ -1,0 +1,38 @@
+@if (User.Identity.IsAuthenticated)
+{
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-user navbar-popover" data-toggle="tooltip" data-placement="bottom" title="Profile">
+            </i>
+            <span class="ml-2 d-md-none">Профил</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+            <h5 class="dropdown-header">
+                @User.Identity.Name
+                @{
+                    var claim = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/authenticationmethod");
+                    if (claim != null)
+                    {
+                        @:(@claim.Value)
+                    }
+                }
+            </h5>
+            <a class="dropdown-item" asp-controller="Details" asp-action="Index" asp-area="Account"><i class="fas fa-user-circle fa-fw text-muted mr-2"></i>Профил</a>
+            <a class="dropdown-item" asp-controller="Details" asp-action="ChangePassword" asp-area="Account"><i class="fas fa-key fa-fw text-muted mr-2"></i>Смени парола</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item text-danger" href="javascript:document.getElementById('logoutForm').submit()">
+                <i class="fas fa-sign-out-alt fa-fw text-danger mr-2"></i>
+                Изход
+            </a>
+        </div>
+    </li>
+    <form asp-controller="Authentication" asp-action="Logout" asp-area="Account" method="post" id="logoutForm">
+       
+    </form>
+}
+else
+{
+    <li class="nav-item mt-3 mt-lg-0 ml-lg-3 d-lg-none d-xl-inline-block">
+         <a class="btn btn-primary" asp-area="Account" asp-controller="Authentication" asp-action="Login">Вход</a>
+    </li>
+}

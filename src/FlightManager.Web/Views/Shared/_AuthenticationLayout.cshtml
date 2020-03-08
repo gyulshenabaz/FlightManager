@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/bootstrap-select.min.css">
+
+    @RenderSection("CustomCss", required: false)
+
+    <title>@ViewData["Title"] - Flight Manager</title>
+    
+    <link rel="shortcut icon" href="~/favicon.png">
+    
+</head>
+<body>
+
+<div class="container-fluid px-3">
+    @RenderBody()
+</div>
+
+<script src="~/js/bootstrap.bundle.min.js"></script>
+<partial name="_ValidationScriptsPartial"/>
+
+@RenderSection("Scripts", required: false)
+
+</body>
+</html>

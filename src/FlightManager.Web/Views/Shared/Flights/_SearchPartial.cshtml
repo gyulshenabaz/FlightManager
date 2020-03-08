@@ -1,0 +1,36 @@
+@model FlightManager.Web.Areas.Flights.Models.Flights.SearchBindingModel
+
+<div class="search-bar mt-12p p-3 p-lg-1 pl-lg-4">
+    <form asp-controller="Flights" asp-action="Search" asp-area="Flights" method="get" id="searchForm">
+        <div class="row">
+            <div class="col-lg-3 d-flex align-items-center form-group">
+                <div class="input-group">
+                    <input asp-for="From" id="fromInput" placeholder="Откъде?" class="form-control border-0 shadow-0">
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-icon" onclick="getNearestAirportCity('#fromIcon', '#fromInput')">
+                            <i id="fromIcon" class="fas fa-crosshairs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 d-flex align-items-center form-group">
+                <div class="input-label-absolute input-label-absolute-right w-100">
+                    <div class="input-group">
+                        <input asp-for="To" id="toInput" placeholder="Докъде?" class="form-control border-0 shadow-0">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-icon" onclick="getNearestAirportCity('#toIcon', '#toInput')">
+                                <i id="toIcon" class="fas fa-crosshairs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 d-flex align-items-center form-group no-divider">
+                <input asp-for="Date" id="date" placeholder="Дата на заминаване" class="form-control border-0 shadow-0">
+            </div>
+            <div class="col-lg-3">
+                <button type="submit" class="btn btn-primary btn-block rounded-xl h-100">Търси</button>
+            </div>
+        </div>
+    </form>
+</div>
