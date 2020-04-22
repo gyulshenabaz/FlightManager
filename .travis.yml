@@ -1,0 +1,18 @@
+branches:
+  only: 
+    - develop
+    - master
+ 
+language: csharp
+mono: none
+sudo: false
+dist: bionic
+dotnet: 3.1
+before_install:  
+  - sudo apt-get install -y dotnet-runtime-3.1
+  
+script:  
+  - dotnet --version
+  - cd src
+  - dotnet restore
+  - dotnet build
